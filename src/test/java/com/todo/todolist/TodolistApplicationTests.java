@@ -16,7 +16,7 @@ class TodolistApplicationTests {
 	private WebTestClient webTestClient;
 
 	@Test
-	void testeCriarTarefaSucesso() {
+	void eCriarTarefaSucesso() {
 		var todo = new Todo(
 			"Tarefa 1", "Descrição tarefa", false, 1
 		);
@@ -37,7 +37,7 @@ class TodolistApplicationTests {
 	}
 
 	@Test
-	void testeCriarTarefaFalha() {
+	void eCriarTarefaFalha() {
 		webTestClient
 			.post()
 			.uri("/todos")

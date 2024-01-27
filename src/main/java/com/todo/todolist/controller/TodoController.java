@@ -2,6 +2,7 @@ package com.todo.todolist.controller;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/todos")
 public class TodoController {
 
@@ -47,7 +49,7 @@ public class TodoController {
 
     @Operation(summary = "Apagar tarefa", description = "Apaga tarefa")
     @DeleteMapping("{id}")
-    List<Todo> apagarTarefa(@PathVariable("id") Long id) {
+    List<Todo> apagarTarefa(@PathVariable Long id) {
         return todoService.apagarTarefa(id);
     }
 
