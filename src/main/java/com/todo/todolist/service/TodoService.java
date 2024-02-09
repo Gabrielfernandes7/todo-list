@@ -4,6 +4,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.todo.todolist.entity.Todo;
+import com.todo.todolist.entity.dto.TodoRequestDTO;
+import com.todo.todolist.entity.dto.TodoResponseDTO;
 import com.todo.todolist.repository.TodoRepository;
 
 import java.util.List;
@@ -18,28 +20,32 @@ public class TodoService {
         this.todoRepository = todoRepository;
     }
 
-    public List<Todo> criarTarefa(Todo todo) {
-        todoRepository.save(todo);
+    public void criarTarefa(TodoRequestDTO data) {
 
-        return listarTarefa();
+        Todo todoData = new Todo(data);
+
+        todoRepository.save(todoData);
+        return;
     }
 
-    public List<Todo> listarTarefa() {
+    public List<TodoResponseDTO> listarTarefa() {
         // consulta ordenada por prioridades de forma descendente
         Sort sort = Sort.by("prioridade").descending().and(
             Sort.by("nome").ascending()
         );
 
-        return todoRepository.findAll(sort);
+        return todoRepository.findAll(sort).stream()
+                                           .map(TodoResponseDTO::new)
+                                           .toList();
     }
 
-    public List<Todo> atualizarTarefa(Todo todo) {
+    public List<TodoResponseDTO> atualizarTarefa(Todo todo) {
         todoRepository.save(todo);
 
         return listarTarefa();
     }
 
-    public List<Todo> apagarTarefa(Long id) {
+    public List<TodoResponseDTO> apagarTarefa(Long id) {
         todoRepository.deleteById(id);
         
         return listarTarefa();
