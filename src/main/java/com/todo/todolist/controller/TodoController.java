@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.todo.todolist.entity.Todo;
+import com.todo.todolist.entity.dto.TodoRequestDTO;
+import com.todo.todolist.entity.dto.TodoResponseDTO;
 import com.todo.todolist.service.TodoService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,25 +33,25 @@ public class TodoController {
     
     @Operation(summary = "Criar uma tarefa", description = "Cria uma nova tarefa")
     @PostMapping
-    List<Todo> criarTarefa(@RequestBody @Valid Todo todo) {
-        return todoService.criarTarefa(todo);
+    public void criarTarefa(@RequestBody @Valid TodoRequestDTO todo) {
+        todoService.criarTarefa(todo);
     }
 
     @Operation(summary = "Mostrar tarefas", description = "Mostra todas tarefas")
     @GetMapping
-    List<Todo> listarTarefas() {
+    public List<TodoResponseDTO> listarTarefas() {
         return todoService.listarTarefa();
     }
 
     @Operation(summary = "Atualizar dados de tarefa", description = "Atualiza dados da tarefa")
     @PutMapping
-    List<Todo> atualizarTarefa(Todo todo) {
+    List<TodoResponseDTO> atualizarTarefa(Todo todo) {
         return todoService.atualizarTarefa(todo);
     } 
 
     @Operation(summary = "Apagar tarefa", description = "Apaga tarefa")
     @DeleteMapping("{id}")
-    List<Todo> apagarTarefa(@PathVariable Long id) {
+    List<TodoResponseDTO> apagarTarefa(@PathVariable Long id) {
         return todoService.apagarTarefa(id);
     }
 
