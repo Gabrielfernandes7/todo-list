@@ -19,6 +19,17 @@ spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 ```
 
+## Configurar o application.properties para conectar o banco de dados com a aplicação (Postgres)
+
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/<nome_do_banco>
+spring.datasource.username=postgres
+spring.datasource.password=<sua_senha_do_banco_de_dados>
+
+# Configurações do Hibernate
+spring.jpa.hibernate.ddl-auto=create
+```
+
 ## Criar o banco de dados no linux (MySQL)
 
 ### Ir no terminal e digitar o seguinte comando
@@ -28,6 +39,12 @@ mysql -u root -p
 ```
 
 Posteriormente, digite a senha que você configurou seu MySQL
+
+## Criar o banco de dados no linux (Postgres)
+
+```bash
+sudo -u postgres psql
+```
 
 ### Listar todos os bancos de dados cadastrados
 
@@ -75,7 +92,7 @@ mysql> desc todos;
 
 ### Criamos dentro do diretório de testes um resources
 
-Dentro do resources devemos criar um application.properties
+Dentro do resources do diretório test/ devemos criar um application.properties
 somente para testes.
 
 ```properties
