@@ -9,6 +9,7 @@ import com.todo.todolist.entity.dto.TodoResponseDTO;
 import com.todo.todolist.repository.TodoRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TodoService {
@@ -43,6 +44,36 @@ public class TodoService {
         todoRepository.save(todo);
 
         return listarTarefa();
+    }
+
+    public TodoResponseDTO atualizarParcialTarefa(Long id, TodoRequestDTO data) {
+        Optional<Todo> todoOptional = todoRepository.findById(id);
+
+        if (todoOptional.isPresent()) {
+            Todo todo = todoOptional.get();
+
+            if (data.nome() != null) {
+                todo.setNome(data.nome());
+            }
+
+            if (data.descricao() != null) {
+                todo.setDescricao(data.descricao());
+            }
+
+            if (data.prioridade() != null) {
+                todo.setPrioridade(data.prioridade());
+            }
+
+            if (data.realizado()) {
+                todo.setRealizado(data.realizado());
+            }
+
+            todoRepository.save(todo);
+
+            return new TodoResponseDTO(todo);
+        } else {
+            throw new RuntimeException("Tarefa não encontrada");
+        }
     }
 
     public List<TodoResponseDTO> apagarTarefa(Long id) {
