@@ -2,9 +2,11 @@ package com.todo.todolist.controller;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -25,7 +27,7 @@ import jakarta.validation.Valid;
 @RequestMapping("/todos")
 public class TodoController {
 
-    private TodoService todoService;
+    private final TodoService todoService;
 
     public TodoController(TodoService todoService) {
         this.todoService = todoService;
@@ -33,26 +35,33 @@ public class TodoController {
     
     @Operation(summary = "Criar uma tarefa", description = "Cria uma nova tarefa")
     @PostMapping
-    public void criarTarefa(@RequestBody @Valid TodoRequestDTO todo) {
+    public ResponseEntity<Void> criarTarefa(@RequestBody @Valid TodoRequestDTO todo) {
         todoService.criarTarefa(todo);
+        return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "Mostrar tarefas", description = "Mostra todas tarefas")
     @GetMapping
-    public List<TodoResponseDTO> listarTarefas() {
-        return todoService.listarTarefa();
+    public ResponseEntity<List<TodoResponseDTO>> listarTarefas() {
+        return ResponseEntity.ok(todoService.listarTarefa());
     }
 
     @Operation(summary = "Atualizar dados de tarefa", description = "Atualiza dados da tarefa")
     @PutMapping
-    List<TodoResponseDTO> atualizarTarefa(Todo todo) {
-        return todoService.atualizarTarefa(todo);
-    } 
-
-    @Operation(summary = "Apagar tarefa", description = "Apaga tarefa")
-    @DeleteMapping("{id}")
-    List<TodoResponseDTO> apagarTarefa(@PathVariable Long id) {
-        return todoService.apagarTarefa(id);
+    public ResponseEntity<List<TodoResponseDTO>> atualizarTarefa(@RequestBody @Valid Todo todo) {
+        return ResponseEntity.ok(todoService.atualizarTarefa(todo));
     }
 
+    @Operation(summary = "Atualizar parcialmente dados de tarefa", description = "Atualizar alguns campos de tarefas")
+    @PatchMapping("/{id}")
+    public ResponseEntity<TodoResponseDTO> atualizarAlgunsCampos(@PathVariable Long id, @RequestBody TodoRequestDTO data) {
+        TodoResponseDTO updatedTodo = todoService.atualizarParcialTarefa(id, data);
+        return ResponseEntity.ok(updatedTodo);
+    }
+
+    @Operation(summary = "Apagar tarefa", description = "Apaga tarefa")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<List<TodoResponseDTO>> apagarTarefa(@PathVariable Long id) {
+        return ResponseEntity.ok(todoService.apagarTarefa(id));
+    }
 }
